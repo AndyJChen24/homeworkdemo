@@ -1,10 +1,10 @@
-# Quiz
+# Work Day Schdueler
 
-This program will generate a list of question for the user to answer. There will be 4 answers and user can select 1 and the next question will replace the current question on screen. The user has 60 seconds to answer all questions. If user answer a question wrong timer will subtract 10 seconds. Once the quiz is complete user and put onto the scoreboard. A link to the score board will be place on the upper left hand side.
+This program creates a simple work day scheduler that display the current date on top of the page. This scheduler will have a time block that allow user to edit and save what they plan to do on that day and time onto the page. The saved text will persist even on page refresh. 
 
 ## Getting Started
 
-Click any multiple choice answer to view next question.
+Click any text box and type any plans onto the page. Click the lock button next to the text box you wish to save.
 
 ### Prerequisites
 
@@ -16,5 +16,5 @@ No installing anything.
 
 ## Authors
 
-* **Andy J chen** - *Initial work* - https://github.com/AndyJChen24/Homework/tree/master/Week4/02-Homework
+* **Andy J chen** - *Initial work* - https://github.com/AndyJChen24/Homework/tree/master/Week5/02-Homework
 
