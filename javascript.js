@@ -15,6 +15,7 @@ $(document).ready(function(){
     $(".saveBtn").on("click", function(){
         // get user input for plans for that time
         var plans = $(this).prev().val();
+
         // point to the sibling element 
         var keyPointer = $(this).siblings()[0];
         // set the text inside sibling element as the key to local storage
@@ -51,6 +52,10 @@ function currentTime(){
     if(currentHour > 12){
         currentHour = currentHour -12;
         hour = currentHour+"PM";
+        console.log(hour)
+    }
+    else if(currentHour == 12){
+        hour = currentHour +"PM";
     }
     else{hour = currentHour+"AM"}
     //return the hour
