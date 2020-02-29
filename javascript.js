@@ -62,7 +62,7 @@ $(document).ready(function(){
 // My AJAX called function to get current weather, 5 day weather and UV Index
 function aJax(city, date){
             var appID = "c0bc6e775276a56ec675604dad9eb699";
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + appID;
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + appID;
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -73,7 +73,7 @@ function aJax(city, date){
                 var humidity = response.main.humidity;
                 var windSpeed =  response.wind.speed;
                 var iconCode = response.weather[0].icon;
-                var iconLink ="http://openweathermap.org/img/w/" + iconCode + ".png"
+                var iconLink ="https://openweathermap.org/img/w/" + iconCode + ".png"
                 // Put them into html
                 $(".city").html(cityName+ "<img src='" + iconLink+ "' alt='Weather icon'>");
                 $(".temperature").html("Temperature: "+temperature.toFixed(2)+"&degF");
@@ -83,7 +83,7 @@ function aJax(city, date){
                 // ajax call for UV Index and create a button base on serverity 
                 var longitute = response.coord.lon;
                 var latitute = response.coord.lat;
-                var queryUVURL = "http://api.openweathermap.org/data/2.5/uvi?appid="+ appID + "&lat=" +latitute+"&lon="+longitute;
+                var queryUVURL = "https://api.openweathermap.org/data/2.5/uvi?appid="+ appID + "&lat=" +latitute+"&lon="+longitute;
                 $.ajax({
                     url: queryUVURL,
                     method: "GET"
@@ -110,7 +110,7 @@ function aJax(city, date){
 
 
                 // ajax call for 5 day forecast
-                var query5dayURL = "http://api.openweathermap.org/data/2.5/forecast?q="+city +"&appid="+appID;
+                var query5dayURL = "https://api.openweathermap.org/data/2.5/forecast?q="+city +"&appid="+appID;
                 $.ajax({
                     url: query5dayURL,
                     method:"GET"
@@ -132,7 +132,7 @@ function aJax(city, date){
                             var Temp = (response.list[index].main.temp-273.15)*(9/5)+32;
                             var Humidity = response.list[index].main.humidity;
                             var icon = response.list[index].weather[0].icon;
-                            var link = "http://openweathermap.org/img/w/" + icon + ".png";
+                            var link = "https://openweathermap.org/img/w/" + icon + ".png";
                             //Set the html with those values
                             $("."+i+"DayDate").html(Date+"<img src='"+link+"' alt='Weather icon'>");
                             $("."+i+"DayTemp").html("Temp: "+Temp.toFixed(2)+"&degF");
