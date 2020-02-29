@@ -1,101 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>Work Day Scheduler</title>
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <!--Link to Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Link to Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--Link to Jquery-->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <!--Link to my own javascript-->
+    <script src="javascript.js"></script>
+    <!--Link to moment-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <!--Link to my own style sheet-->
+    <link rel="stylesheet" href="style.css">
 
-  <body>
-    <header class="jumbotron">
-      <h1 class="display-3">Work Day Scheduler</h1>
-      <p class="lead">A simple calendar app for scheduling your work day</p>
-      <p id="currentDay" class="lead"></p>
-    </header>
-    <div class="container">
-      <!-- Timeblocks go here -->
-      <div class="row">
-        <div class="col-sm-2 hour" id = "9AM"> 9 AM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "10AM"> 10 AM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "11AM"> 11 AM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "12PM"> 12 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "1PM"> 1 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "2PM"> 2 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "3PM"> 3 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "4PM"> 4 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "5PM"> 5 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "6PM"> 6 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "7PM"> 7 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-2 hour" id = "8PM"> 8 PM</div>
-        <textarea class="form col-sm-8" type="text"></textarea>
-        <div class="col-sm-2 saveBtn btn" >Lock</div>
-      </div>
+</head>
+<body>
+    <!--Container for everything-->
+    <div class="container-fluid">
+        <!--My Jumbotron for my weather image -->
+        <div class="jumbotron">
+            <h1 class="display-4"><strong>Weather Dashboard</strong></h1>
+        </div>
+        <!--Row for both search bar and the weather forecast-->
+        <div class="row">
+            <!--Search bar-->
+            <div class="search col-3">
+                <h4>Search for a city:</h4>
+                <!--Search Textbox and button-->
+                <form class="form">
+                    <input type="text" placeholder="Search" id="userCity">
+                    <button type="button" id="searchbtn"><i class="fa fa-search"></i></button>
+                </form>
+                <!--Search History-->
+                <div id="previousSearch">
+                </div>
 
+            </div>
+
+            <!--Weather forecast-->
+            <div class="col-9">
+                <div class ="container">
+                    <!--Current Weather Forecast-->
+                    <div class="row card" id= "cityWeather">
+                        <div class="card-body">
+                            <h3 class="city">City:</h3>
+                            <div class="temperature">Temperature:</div>
+
+                            <div class="humidity">Humidity:</div>
+                            
+                            <div class="windSpeed">Wind Speed:</div>
+                            
+                            <div class="UV">UV Index: <button class ="btn" disable>0</button></div>
+                            
+                        </div>
+                    </div>
+
+                    <!--5 Day forecast-->
+                    <div class = "row" id= "5day">
+                        <h3>5 Day forecast</h3>
+                        <div class = "container">
+                            <div class="row">
+                                <div class="card col-md-2" >
+                                    <div class="card-body 1DayLater">
+                                    <h5 class="card-title 1DayDate">Date</h5>
+                                    <p class="card-subtitle mb-2 1DayTemp">Temperature</p>
+                                    <p class="card-subtitle mb-2 1DayHumidity">Humidity</p>
+                                    </div>
+                                </div>
+                                <div class="card col-md-2" >
+                                    <div class="card-body 2DayLater">
+                                    <h5 class="card-title 2DayDate">Date</h5>
+                                    <p class="card-subtitle mb-2 2DayTemp">Temperature<p>
+                                    <p class="card-subtitle mb-2 2DayHumidity">Humidity</p>
+                                    </div>
+                                </div>
+                                <div class="card col-md-2" >
+                                    <div class="card-body 3DayLater">
+                                    <h5 class="card-title 3DayDate">Date</h5>
+                                    <p class="card-subtitle mb-2 3DayTemp">Temperature</p>
+                                    <p class="card-subtitle mb-2 3DayHumidity">Humidity</p>
+                                    </div>
+                                </div>
+                                <div class="card col-md-2" >
+                                    <div class="card-body 4DayLater">
+                                    <h5 class="card-title 4DayDate">Date</h5>
+                                    <p class="card-subtitle mb-2 4DayTemp">Temperature</p>
+                                    <p class="card-subtitle mb-2 4DayHumidity">Humidity</p>
+                                    </div>
+                                </div>
+                                <div class="card col-md-2" >
+                                    <div class="card-body 5DayLater">
+                                    <h5 class="card-title 5DayDate">Date</h5>
+                                    <p class="card-subtitle mb-2 5DayTemp">Temperature</p>
+                                    <p class="card-subtitle mb-2 5DayHumidity">Humidity</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+
     
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src ="javascript.js"></script>
-  </body>
+</body>
 </html>

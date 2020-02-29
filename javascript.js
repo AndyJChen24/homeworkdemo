@@ -1,104 +1,146 @@
-
+// on load get history from local storage
+function onload(){
+    var load = JSON.parse(localStorage.getItem("history"))
+    // check if load is null if not then there is something in local storage 
+    if(load != null){
+        load.forEach(function(value){
+            
+            $("#previousSearch").prepend("<button class='btn-lg btn-block' id='"+value+"'>"+value+"</button>")
+        })
+    }
+}
+var list =[];
+// store history into local storage
+function store(city){
+    list.push(city);
+    
+    localStorage.setItem("history",JSON.stringify(list))
+}
 
 $(document).ready(function(){
     // get date and year 
     var m = moment();
     // set format for date
-    var date = m.format('MMM Do YYYY');
-    //set date to header
-    $("#currentDay").text(date)
-    onLoad();
-    var now = currentTime();
-    colorScheme(now);
-
-    // get button click
-    $(".saveBtn").on("click", function(){
-        // get user input for plans for that time
-        var plans = $(this).prev().val();
-
-        // point to the sibling element 
-        var keyPointer = $(this).siblings()[0];
-        // set the text inside sibling element as the key to local storage
-        var key = $(keyPointer).attr("id");
-        
-        // saved plans to local storage
-        localStorage.setItem(key, JSON.stringify(plans))
+    var date = m.format('MM/DD/YYYY');
+    
+    // load from local memory
+    onload();
+    // check if button block from previousSearch is clicked 
+    $(".btn-block").click(function(event){
+        //event.preventDefault();
+        city= $(this).attr("id")
+        aJax(city,date)
+        store(city)
     })
+    // if searchbtn is clicked
+    $("#searchbtn").click(function(){
+        // ajax called to search current city weather
+        var city = $("#userCity").val()
+        // check if the text box is empty and if not empty then do the rest of the program
+        if (city.length > 0) {
+
+            // prepend a button with the city name
+            $("#previousSearch").prepend("<button class='btn-lg btn-block' id='"+city+"'>"+city+"</button>")
+            //store city into local storage
+            store(city);
+            // called my ajax function
+            aJax(city, date);  
+            // check if button block from previousSearch is clicked 
+            $(".btn-block").click(function(event){
+                //event.preventDefault();
+                city= $(this).attr("id")
+                aJax(city,date)
+            })
+        }
+        
+    })
+    
 })
 
 
 
+// My AJAX called function to get current weather, 5 day weather and UV Index
+function aJax(city, date){
+            var appID = "c0bc6e775276a56ec675604dad9eb699";
+            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + appID;
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function(response){
+                // set all response value that we need
+                var cityName = response.name+" "+date;
+                var temperature = (response.main.temp-273.15)*(9/5)+32;
+                var humidity = response.main.humidity;
+                var windSpeed =  response.wind.speed;
+                var iconCode = response.weather[0].icon;
+                var iconLink ="http://openweathermap.org/img/w/" + iconCode + ".png"
+                // Put them into html
+                $(".city").html(cityName+ "<img src='" + iconLink+ "' alt='Weather icon'>");
+                $(".temperature").html("Temperature: "+temperature.toFixed(2)+"&degF");
+                $(".humidity").html("Humidity: "+humidity+"%")
+                $(".windSpeed").html("Wind Speed: "+ windSpeed+ "MPH");
+
+                // ajax call for UV Index and create a button base on serverity 
+                var longitute = response.coord.lon;
+                var latitute = response.coord.lat;
+                var queryUVURL = "http://api.openweathermap.org/data/2.5/uvi?appid="+ appID + "&lat=" +latitute+"&lon="+longitute;
+                $.ajax({
+                    url: queryUVURL,
+                    method: "GET"
+                }).then(function(response){
+                    var uvIndex = response.value;
+                    
+                    if(uvIndex <3){
+                        $(".btn").addClass("btn-success");
+                        $(".btn").removeClass("btn-warning");
+                        $(".btn").removeClass("btn-danger");
+                    }
+                    else if(uvIndex >3 && uvIndex <5){
+                        $(".btn").addClass("btn-warning")
+                        $(".btn").removeClass("btn-success");
+                        $(".btn").removeClass("btn-danger");
+                    }
+                    else{
+                        $(".btn").addClass("btn-danger")
+                        $(".btn").removeClass("btn-success");
+                        $(".btn").removeClass("btn-warning");
+                    }
+                    $(".btn").html(uvIndex);
+                })
 
 
-
-// called this function to load all user plans from local memory to screen
-function onLoad(){
-    // created an array for all the times on the planner because this program used the time as a key
-    var timeblock = ["9AM", "10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM"]
-    // for each time on the planner 
-    $.each(timeblock, function(index,value){
-        // get the what user store into local memery
-        items = JSON.parse(localStorage.getItem(value))
-        // put the value inside that key on the text blocks
-        $("#"+ value).next().text(items);
-    })
-}
-
-// Called this function to tell the current time
-function currentTime(){
-    var currentHour = moment().hours();
-    var hour;
-    // we want a 12 hour clock so if it exceed 12 then subtract 12 and concat PM to it
-    if(currentHour > 12){
-        currentHour = currentHour -12;
-        hour = currentHour+"PM";
-        console.log(hour)
-    }
-    else if(currentHour == 12){
-        hour = currentHour +"PM";
-    }
-    else{hour = currentHour+"AM"}
-    //return the hour
-    return hour;
-}
-
-//create color scheme, gray for past , red for current , green for future
-function colorScheme(now){
-
-
-    // create an array to help check if time is prior to time block
-    var priortime = ["0AM", "1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM"];
-    $.each(priortime, function(index,value){
-        if(now == value){
-            
-            // added class future for all div with class name of form so that all time prior to the timeblock is now in the future
-            $(".form").addClass("future");
-        }
-    })
-    // create an array to help check if time is after to time block
-    var aftertime = ["9PM", "10PM", "11PM"];
-    $.each(aftertime, function(index,value){
-        if(now == value){
-            
-            // added class past for all div with class name of form so that all time on the timeblock is now in the past
-            $(".form").addClass("past");
-        }
-    })
-
-    var timeblock = ["9AM", "10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM"];
-    // for each time on the planner 
-    $.each(timeblock, function(index,value){
-        
-        // check if the current time is equal to the value in the array
-        if(now == value){
-
-            // add to the div with the ID of the current time a new class called present and remove the class future from it
-            $("#" + value).next().addClass("present").removeClass("future");
-            // Make a for loop to set the current index value as the maximum to loop through the timeblock array again  
-            for(var i =0; i < index; i++){
-                // all previous div before the current time get added a new class called past and remove the class future from it
-                $("#"+timeblock[i]).next().addClass("past").removeClass("future");
-            }
-        }
-    })
+                // ajax call for 5 day forecast
+                var query5dayURL = "http://api.openweathermap.org/data/2.5/forecast?q="+city +"&appid="+appID;
+                $.ajax({
+                    url: query5dayURL,
+                    method:"GET"
+                }).then(function(response){
+                    // i is the first card pointer 
+                    var i =1;
+                    // loop through the 3 hour 5 days array 
+                    $.each(response.list, function(index, value){
+                        // get the time of the current element in the array
+                        var time = response.list[index].dt_txt;
+                        // get the hour
+                        var test = moment(time).format("hA")
+                        // get the date 
+                        var currentDate = moment(time).format("MM/DD/YYYY")
+                        // check if it is 3PM
+                        if(test == "3PM"){
+                            // set up variables and set them into html
+                            var Date = currentDate;
+                            var Temp = (response.list[index].main.temp-273.15)*(9/5)+32;
+                            var Humidity = response.list[index].main.humidity;
+                            var icon = response.list[index].weather[0].icon;
+                            var link = "http://openweathermap.org/img/w/" + icon + ".png";
+                            //Set the html with those values
+                            $("."+i+"DayDate").html(Date+"<img src='"+link+"' alt='Weather icon'>");
+                            $("."+i+"DayTemp").html("Temp: "+Temp.toFixed(2)+"&degF");
+                            $("."+i+"DayHumidity").html("Humidity: "+Humidity+"%");
+                            // increment card value
+                            i++;
+                        }
+                    })
+                })
+            })
 }
